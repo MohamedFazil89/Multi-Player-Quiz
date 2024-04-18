@@ -1,0 +1,67 @@
+/* Styles for the body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+/* Styles for the form */
+form {
+    margin: 20px;
+}
+
+/* Styles for the input fields */
+input[type="text"],
+input[type="password"] {
+    width: 200px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #030303;
+    border-radius: 5px;
+}
+
+/* Styles for the submit button */
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Styles for the Login link */
+.btn {
+    display: block;
+    margin: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #007bff;
+}
+
+/* Styles for the login form */
+.login {
+    display: none;
+    margin: 20px;
+}
+ /* my styles */
+
+form{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.login{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5rem;
+    position: fixed;
+    
+}
