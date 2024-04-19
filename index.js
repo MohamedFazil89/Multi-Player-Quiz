@@ -75,6 +75,24 @@ app.post("/submit", (req, res) =>{
     res.redirect("/");
 });
 
+app.get("/list", (req, res) =>{
+    var val = '';
+    db.query('select * from users', (err, results) =>{
+        if(!err){
+            val = JSON.stringify(results.rows);
+            val = val.replace(/^"(.*)"$/, '$1');
+            console.log("done")
+            res.render("index.ejs", {
+                data: val,
+            })
+        }else{
+            console.log("error")
+        }
+        
+    });
+    
+})
+
 app.listen(port, ()=>{
-    console.log(`Server is running on the port ${port}`);
+    console.log(`Server is running on the port https://localhost:${port}`);
 });
