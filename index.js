@@ -11,15 +11,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 const db = new pg.Client({
-    user: 'postgres', 
-    password: 'shin2005-89', 
-    database: 'testdb', 
-    host: 'localhost',
-    port: 5432, 
+    user: 'postgres', // default user name for all users
+    password: 'shin2005-89', // your own postgresql password
+    database: 'testdb', // your own database name
+    host: 'localhost', // localhost defualt or any host name
+    port: 5432, // default port
 });
 
 db.connect();
 
+// In all the querys i mentioned users that is your database -> table name
 const postfunc = (username, password) =>{
     db.query('insert into users values ($1, $2)', [username, password], (err, res) =>{
         if(!err){
