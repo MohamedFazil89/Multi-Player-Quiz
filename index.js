@@ -3,6 +3,13 @@ import bodyParser from "body-parser";
 import pg from "pg";
 const app = express();
 
+// At the beginning run these commands
+
+//      npm i
+    
+//     nodemon index.js 
+
+
 const port = 3000;
 
 app.set('view engine', 'ejs');
