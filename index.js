@@ -6,7 +6,7 @@ const app = express();
 // At the beginning run these commands
 
 //      npm i
-    
+
 //     nodemon index.js 
 
 
@@ -28,17 +28,17 @@ const db = new pg.Client({
 db.connect();
 
 // In all the querys i mentioned users that is your database -> table name
-const postfunc = (username, password) =>{
-    db.query('insert into users values ($1, $2)', [username, password], (err, res) =>{
-        if(!err){
+const postfunc = (username, password) => {
+    db.query('insert into users values ($1, $2)', [username, password], (err, res) => {
+        if (!err) {
             console.log("success");
-        }else{
+        } else {
             console.log(err);
         }
     });
 }
 
-const checkfunc = (username, password,  res) => {
+const checkfunc = (username, password, res) => {
     db.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password], (err, result) => {
         if (!err) {
             if (result.rows.length > 0) {
@@ -47,19 +47,19 @@ const checkfunc = (username, password,  res) => {
 
             } else {
                 console.log("Not a member!! Register!!");
-                res.send("Not a member!! Regester!!")
+                res.send("Not a member!! Regester!!");
             }
         } else {
             console.error("Error checking user:", err);
         }
     });
-    
+
 }
 
 
-app.get("/", (req, res) =>{
-    db.query("select * from users", (err, result) =>{
-        if(err){
+app.get("/", (req, res) => {
+    db.query("select * from users", (err, result) => {
+        if (err) {
             console.log(err);
             res.status(500).send('Internal Server Error');
             return;
@@ -70,37 +70,37 @@ app.get("/", (req, res) =>{
 
 })
 
-app.post("/login", (req, res) =>{
-   const { username, password } = req.body;
-   checkfunc(username, password, res);
+app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    checkfunc(username, password, res);
 
 
 })
 
-app.post("/submit", (req, res) =>{
+app.post("/submit", (req, res) => {
     const { username, password } = req.body;
     postfunc(username, password);
     res.redirect("/");
 });
 
-app.get("/list", (req, res) =>{
+app.get("/list", (req, res) => {
     var val = '';
-    db.query('select * from users', (err, results) =>{
-        if(!err){
+    db.query('select * from users', (err, results) => {
+        if (!err) {
             val = JSON.stringify(results.rows);
             val = val.replace(/^"(.*)"$/, '$1');
             console.log("done")
             res.render("index.ejs", {
                 data: val,
-            })
-        }else{
-            console.log("error")
+            });
+        } else {
+            console.log("error");
         }
-        
+
     });
-    
+
 })
 
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log(`Server is running on the port https://localhost:${port}`);
 });
