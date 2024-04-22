@@ -50,12 +50,16 @@
           </button>
         </form>
       </div>
-      <a href="#" class="btn" onclick="toggle('.login');">Login</a>
+      <a href="#" class="btn" onclick="toggle('.login','.reg');" id="title">Login</a>
 
     <script>
         function toggle(classname,regs) {
             const login = document.querySelector(classname);
             login.style.display = login.style.display === "none" ? "block" : "none";
+            document.getElementById('title').textContent = login.style.display === "block" ? "Register" : "Login";
+            const reg = document.querySelector(regs);
+            reg.style.display = login.style.display === "none" ? "block" : "none";
+            
         }
 
 

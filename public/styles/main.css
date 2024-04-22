@@ -5,7 +5,11 @@ html {
     margin:0;
     padding:0;
     font-family: sans-serif;
-    background: linear-gradient(#141e30, #243b55);
+    /* background: linear-gradient(#141e30, #243b55); */
+    background-image: url('./assets/2151038309.jpg');
+    background-size:  auto;
+    background-position: center;
+    
   }
   
   .login-box {
@@ -20,7 +24,8 @@ html {
     box-shadow: 0 15px 25px rgba(0,0,0,.6);
     border-radius: 10px;
     box-shadow: 0 0 70px rgba(0,0,0,5);
-  }
+    
+    }
   
   .login-box h1 {
     margin: 0 0 30px;
@@ -84,7 +89,8 @@ html {
     overflow: hidden;
     transition: .5s;
     margin-top: 40px;
-    letter-spacing: 4px
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px #03e9f4;
   }
   
   .login-box button:hover {
@@ -204,8 +210,8 @@ html {
 }
 
 .login{
-    background-color: black;
-    box-shadow: 0 0 70px #03e9f4;
+    background-color: rgba(0,0,0,.5);
+    box-shadow: 0 0 70px rgb(82, 0, 82);
 }
 
 .loginbtn{
