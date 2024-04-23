@@ -6,26 +6,23 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  /* background: linear-gradient(#141e30, #243b55); */
   background-image: url('./assets/2151038309.jpg');
-  background-size: auto;
+  background-size: cover;
   background-position: center;
-
 }
 
 .login-box {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 400px;
+  width: 90%; /* Adjusted width for responsiveness */
+  max-width: 400px; /* Added max-width */
   padding: 40px;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, .5);
   box-sizing: border-box;
   box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
   border-radius: 10px;
-  box-shadow: 0 0 70px rgba(0, 0, 0, 5);
-
 }
 
 .login-box h1 {
@@ -75,9 +72,6 @@ button {
   background-color: transparent;
   border: 1px solid rgba(0, 0, 0, .5);
   box-shadow: 0 0 70px rgba(0, 0, 0, 5);
-
-
-
 }
 
 .login-box form button {
@@ -193,7 +187,6 @@ button {
   }
 }
 
-
 .btn {
   display: flex;
   justify-content: center;
@@ -210,7 +203,6 @@ button {
   margin-top: 40px;
   letter-spacing: 4px;
   text-shadow: 0 0 10px #03e9f4;
-
 }
 
 .btn:hover {
@@ -228,8 +220,6 @@ button {
 
 .loginbtn {
   color: blue;
-
-
 }
 
 .role-container {
@@ -244,32 +234,50 @@ label {
   padding: 1rem;
   display: flex;
   transition: .5s;
-
 }
 
-/*  */
-.forgot{
+.forgot {
   color: #026b70;
   transition: .5s;
 }
 
-.forgot:hover, label:hover{
+.forgot:hover,
+label:hover {
   color: #03e9f4;
-  text-shadow: 0 0 5px #03e9f4,
-               0 0 25px #026b70,
-               0 0 50px #026b70,
-               0 0 100px #03e9f4;
+  text-shadow: 0 0 5px #03e9f4, 0 0 25px #026b70, 0 0 50px #026b70, 0 0 100px #03e9f4;
 }
 
-.forgot:active, label:active{
+.forgot:active,
+label:active {
   color: maroon;
 }
 
+/* Media Query for responsiveness */
+@media (max-width: 768px) {
+  .login-box {
+    width: 90%;
+    padding: 20px;
+  }
 
+  .login-box h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 
+  .login-box .user-box input {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
 
+  .login-box form button {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin-top: 30px;
+  }
 
-
-
-
-
+  .btn {
+    font-size: 20px;
+    padding: 8px 16px;
+    margin-top: 30px;
+  }
+}
