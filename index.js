@@ -10,6 +10,7 @@ const app = express();
 //     nodemon index.js 
 
 
+
 const port = 3000;
 
 app.set('view engine', 'ejs');
@@ -27,22 +28,25 @@ const db = new pg.Client({
 
 db.connect();
 
+
+
+
 // In all the querys i mentioned users that is your database -> table name
-const postfunc = (username, password) => {
-    db.query('insert into users values ($1, $2)', [username, password], (err, res) => {
+const postfunc = (username, password, role) => {
+    db.query(`insert into ${role} values ($1, $2)`, [username, password], (err, res) => {
         if (!err) {
-            console.log("success");
+            console.log(`DataSuccessfully registered  into Table ${role}`);
         } else {
             console.log(err);
         }
     });
 }
 
-const checkfunc = (username, password, res) => {
-    db.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password], (err, result) => {
+const checkfunc = (username, password, res, role) => {
+    db.query(`SELECT * FROM ${role} WHERE username = $1 AND password = $2`, [username, password], (err, result) => {
         if (!err) {
             if (result.rows.length > 0) {
-                console.log("User exists:", result.rows[0]);
+                console.log("User exists:", result.rows[0], "from " + `${role} table`);
                 res.render("index2.ejs");
 
             } else {
@@ -71,15 +75,15 @@ app.get("/", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-    const { username, password } = req.body;
-    checkfunc(username, password, res);
+    const { username, password, role } = req.body;
+    checkfunc(username, password, res, role);
 
 
 })
 
 app.post("/submit", (req, res) => {
-    const { username, password } = req.body;
-    postfunc(username, password);
+    const { username, password, role} = req.body;
+    postfunc(username, password, role);
     res.redirect("/");
 });
 
