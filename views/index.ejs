@@ -20,14 +20,18 @@
             </label>
             <br>
             <label>
-              <input type="radio" name="role" value="users" required>
+              <input type="radio" name="role" value="player" required>
               Player
             </label>
           </div>
 
           <div class="user-box">
             <input type="text" name="username" required>
-            <label>username</label>
+            <label id="username">username</label>
+          </div>
+          <div class="user-box">
+            <input type="text" name="email" required>
+            <label>Email</label>
           </div>
           <div class="user-box">
             <input type="password" name="password" required>
@@ -56,13 +60,17 @@
             </label>
             <br>
             <label>
-              <input type="radio" name="role" value="users" required>
+              <input type="radio" name="role" value="player" required>
               Player
             </label>
           </div>
           <div class="user-box">
             <input type="text" name="username" required="">
             <label>username</label>
+          </div>
+          <div class="user-box">
+            <input type="text" name="email" required>
+            <label>Email</label>
           </div>
           <div class="user-box">
             <input type="password" name="password" required="">
@@ -82,6 +90,13 @@
       <a href="#" class="btn" onclick="toggle('.login','.reg');" id="title">Login</a>
 
     <script>
+      const messg = document.getElementById("username");
+      const data = '<%= locals.msg %>';
+      if(data){
+        messg.textContent = data;
+      }else{
+        messg.textContent = "Username";
+      }
         function toggle(classname,regs) {
             const login = document.querySelector(classname);
             login.style.display = login.style.display === "none" ? "block" : "none";

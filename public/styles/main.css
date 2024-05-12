@@ -200,7 +200,7 @@ button {
   text-transform: uppercase;
   overflow: hidden;
   transition: .5s;
-  margin-top: 40px;
+  margin-top: 20px;
   letter-spacing: 4px;
   text-shadow: 0 0 10px #03e9f4;
 }

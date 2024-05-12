@@ -21,7 +21,7 @@ app.use(express.static("public"));
 const db = new pg.Client({
     user: 'postgres', // default user name for all users
     password: 'shin2005-89', // your own postgresql password
-    database: 'testdb', // your own database name
+    database: 'quizdb', // your own database name
     host: 'localhost', // localhost defualt or any host name
     port: 5432, // default port
 });
@@ -29,15 +29,21 @@ const db = new pg.Client({
 db.connect();
 
 
+let errs = "";
+let status = false;
+
 
 
 // In all the querys i mentioned users that is your database -> table name
-const postfunc = (username, password, role) => {
-    db.query(`insert into ${role} values ($1, $2)`, [username, password], (err, res) => {
+const postfunc = (username, email, role, password) => {
+    db.query(`insert into ${role} (username, email, password) values ($1, $2, $3)`, [username, email, password], (err, res) => {
         if (!err) {
             console.log(`DataSuccessfully registered  into Table ${role}`);
+            status = true;
         } else {
             console.log(err);
+            errs = "username must be unique"
+            status = false;
         }
     });
 }
@@ -62,7 +68,7 @@ const checkfunc = (username, password, res, role) => {
 
 
 app.get("/", (req, res) => {
-    db.query("select * from users", (err, result) => {
+    db.query("select * from player", (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send('Internal Server Error');
@@ -79,20 +85,24 @@ app.post("/login", (req, res) => {
     checkfunc(username, password, res, role);
 
 
+
 })
 
 app.post("/submit", (req, res) => {
-    const { username, password, role} = req.body;
-    postfunc(username, password, role);
+    const { username, password, role, email } = req.body;
+    postfunc(username, email, role, password);
     res.redirect("/");
+    
+
 });
 
 app.get("/list", (req, res) => {
     var val = '';
-    db.query('select * from users', (err, results) => {
+    db.query('select * from host', (err, results) => {
         if (!err) {
             val = JSON.stringify(results.rows);
             val = val.replace(/^"(.*)"$/, '$1');
+            console.log(val);
             console.log("done")
             res.render("index.ejs", {
                 data: val,
