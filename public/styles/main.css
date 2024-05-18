@@ -6,7 +6,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background-image: url('./assets/2151038309.jpg');
+  background-image: url('./assets/high-tech-futuristic-urban-travel-people.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -15,8 +15,10 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 90%; /* Adjusted width for responsiveness */
-  max-width: 400px; /* Added max-width */
+  width: 90%;
+  /* Adjusted width for responsiveness */
+  max-width: 400px;
+  /* Added max-width */
   padding: 40px;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, .5);
@@ -40,13 +42,15 @@ body {
 .login-box .user-box input {
   width: 100%;
   padding: 10px 0;
-  font-size: 16px;
+  font-size: 20px;
   color: #fff;
   margin-bottom: 30px;
   border: none;
   border-bottom: 1px solid #fff;
   outline: none;
   background: transparent;
+  font-family: 'Times New Roman', Times, serif;
+  text-shadow: 0 0 10px #03e9f4
 }
 
 .login-box .user-box label {
@@ -191,7 +195,6 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5%;
   z-index: 1;
   padding: 10px 20px;
   color: #03e9f4;
@@ -200,9 +203,16 @@ button {
   text-transform: uppercase;
   overflow: hidden;
   transition: .5s;
-  margin-top: 20px;
+  margin-top: 10px;
   letter-spacing: 4px;
   text-shadow: 0 0 10px #03e9f4;
+  font-weight: bolder;
+  background-color: rgba(0, 0, 0, .5);
+  width: fit-content;  
+  text-align: center;
+  border-radius: 1rem;
+  border: 1px solid #03e9f4;
+  margin: 1rem;
 }
 
 .btn:hover {
@@ -215,8 +225,13 @@ button {
 
 .login {
   background-color: rgba(0, 0, 0, .5);
-  box-shadow: 0 0 70px rgb(82, 0, 82);
+  box-shadow: 0 0 70px rgb(0, 0, 0, 0.5);
+  /* background-image: url('./assets/high-tech-futuristic-urban-travel-people.jpg');
+  background-size: cover;
+  background-position: center; */
+
 }
+
 
 .loginbtn {
   color: blue;

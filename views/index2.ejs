@@ -4,29 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styles/main2.css">
+    <link rel="stylesheet" href="styles/main3.css">
     
 </head>
 <body>
     <div class="login-box">
-        <h2>Login</h2>
-        <form action="/login">
+        <h2>Questions</h2>
+        <form action="/upload" method="post">
           <div class="user-box">
-            <input type="text" name="username" required="">
-            <label>Username</label>
+            <input type="number" name="NofQuestion" required id='QN'>
+            <label>No of Questions</label>
           </div>
-          <div class="user-box">
-            <input type="password" name="password" required="">
-            <label>Password</label>
-          </div>
-          <a href="#">
+          <button type="submit">
             <span></span>
             <span></span>
             <span></span>
             <span></span>
             Submit
-          </a>
+          </button>
         </form>
       </div>
+    
     </body>
 </html>
