@@ -40,7 +40,6 @@ let status = false;
 
 
 
-// In all the querys i mentioned users that is your database -> table name
 const postfunc = (username, email, role, password, res) => {
     db.query(`insert into ${role} (username, email, password) values ($1, $2, $3)`, [username, email, password], (err, res) => {
         if (!err) {

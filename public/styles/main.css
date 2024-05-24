@@ -39,6 +39,10 @@ body {
   position: relative;
 }
 
+.pass{
+  display: flex;
+}
+
 .login-box .user-box input {
   width: 100%;
   padding: 10px 0;
@@ -78,6 +82,11 @@ button {
   box-shadow: 0 0 70px rgba(0, 0, 0, 5);
 }
 
+form{
+  display: flex;
+  flex-direction: column;
+}
+
 .login-box form button {
   position: relative;
   display: inline-block;
@@ -91,6 +100,7 @@ button {
   margin-top: 40px;
   letter-spacing: 4px;
   text-shadow: 0 0 10px #03e9f4;
+  width: fit-content;
 }
 
 .login-box button:hover {
@@ -295,4 +305,27 @@ label:active {
     padding: 8px 16px;
     margin-top: 30px;
   }
+}
+
+/*  */
+
+.fas{
+  position: relative;
+  font-size: 1.5rem;
+  top:0;
+  margin: 0;
+  cursor: pointer;
+  color: white;
+  transition: .2s;
+  width: fit-content;
+
+
+}
+
+.fas:hover{
+  color: #03e9f4;
+}
+
+.fas:active{
+  color:cadetblue ;
 }
