@@ -202,7 +202,6 @@ io.on('connection', (socket) => {
 
 
 });
-// Route to ask for the number of questions
 app.post("/upload", (req, res) => {
     const { NofQuestion } = req.body;
     const totalQuestions = parseInt(NofQuestion, 10);
@@ -216,18 +215,16 @@ app.post("/upload", (req, res) => {
     }
 });
 
-// Route to display the question entry form
 app.get("/enter-question", (req, res) => {
     const { totalQuestions, currentQuestionIndex } = req.session;
 
     if (currentQuestionIndex < totalQuestions) {
         res.render("index3.ejs", { questionNumber: currentQuestionIndex + 1 });
     } else {
-        res.redirect("/next-task"); // Replace with your next task route
+        res.redirect("/next-task"); 
     }
 });
 
-// Route to handle question submission
 app.post("/submit-question", (req, res) => {
     const { question, option1, option2, option3, option4, correctans } = req.body;
     const { totalQuestions, currentQuestionIndex } = req.session;
@@ -243,7 +240,7 @@ app.post("/submit-question", (req, res) => {
                 if (req.session.currentQuestionIndex < totalQuestions) {
                     res.redirect("/enter-question");
                 } else {
-                    res.redirect("/next-task"); // Replace with your next task route
+                    res.redirect("/next-task"); 
                 }
             } else {
                 console.error(err);
@@ -253,7 +250,7 @@ app.post("/submit-question", (req, res) => {
     );
 });
 
-// Replace with your next task route
 app.get("/next-task", (req, res) => {
     res.send("All questions entered. Proceed to the next task.");
 });
+
