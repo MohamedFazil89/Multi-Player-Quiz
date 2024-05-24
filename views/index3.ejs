@@ -9,7 +9,8 @@
 
 <body>
   <h1>Question Upload Page</h1>
-  <form action="/uploaded" method="post">
+  <h2>current question <%= questionNumber %></h2>
+  <form action="/submit-question" method="post">
     <input type="text" placeholder="Enter the question" name="question">
     <input type="text" placeholder="Option 1" name="option1">
     <input type="text" placeholder="Option 2" name="option2">

@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import { Server } from "socket.io";
+import session from "express-session";
 
 
 
@@ -16,12 +17,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
+
+app.use(session({
+    secret: 'thisissecretkeyverystrong', 
+    resave: false,
+    saveUninitialized: true,
+}));
+
 const db = new pg.Client({
-    user: 'postgres', 
-    password: 'shin2005-89', 
-    database: 'quizdb', 
-    host: 'localhost', 
-    port: 5432, 
+    user: 'postgres',
+    password: 'shin2005-89',
+    database: 'quizdb',
+    host: 'localhost',
+    port: 5432,
 });
 
 db.connect();
@@ -44,7 +52,7 @@ const postfunc = (username, email, role, password, res) => {
             status = false;
 
         }
-      
+
     });
 }
 
@@ -53,10 +61,11 @@ const checkfunc = (username, password, res, role) => {
         if (!err) {
             if (result.rows.length > 0) {
                 console.log("User exists:", result.rows[0], "from " + `${role} table`);
-                if(role == "host"){
+                if (role == "host") {
                     res.render("index2.ejs");
-                }else{
-                    res.render("player.ejs");
+
+                } else {
+                    res.redirect("/player");
                 }
 
             } else {
@@ -95,14 +104,64 @@ app.post("/login", (req, res) => {
 app.post("/submit", (req, res) => {
     const { username, password, role, email } = req.body;
     postfunc(username, email, role, password, res);
-    res.redirect("/");
-    
+    setTimeout(() => {
+        res.redirect("/");
+    }, 3000)
+
 
 });
 
+app.get("/player", (req, res) => {
+    db.query("SELECT * FROM questions", (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        let rows = JSON.stringify(result.rows);
+        rows = JSON.parse(rows);
+
+
+        if (rows.length === 0) {
+            res.status(404).send('No questions found');
+            return;
+        }
+
+        let value;
+        let options1;
+        let options2;
+        let options3;
+        let options4;
+
+        for (let i = 0; i < rows.length; i++) {
+            value = rows[i].questions;
+            options1 = rows[i].option1;
+            options2 = rows[i].option2;
+            options3 = rows[i].option3;
+            options4 = rows[i].option4;
+
+
+        }
+
+        console.log("value", value);
+
+
+        res.render("player.ejs", {
+            question: value,
+            option1: options1,
+            option1: options1,
+            option1: options1,
+            option1: options1,
+
+        });
+    });
+});
+
+
 app.get("/list", (req, res) => {
     var val = '';
-    db.query('select * from host', (err, results) => {
+    db.query('select * from = questions', (err, results) => {
         if (!err) {
             val = JSON.stringify(results.rows);
             console.log(val);
@@ -122,45 +181,79 @@ app.get("/list", (req, res) => {
 
 })
 
+
 const server = app.listen(port, () => {
     console.log(`Server is running on the port https://localhost:${port}`);
 });
 
 const io = new Server(server);
-io.on('connection', (socket) =>{
+io.on('connection', (socket) => {
     console.log('a player connected');
 
-    socket.on('disconnect',() =>{
+
+    socket.on('disconnect', () => {
         console.log('player disconnected');
     });
 
-  
 
 
 
+
+
+
+});
+// Route to ask for the number of questions
+app.post("/upload", (req, res) => {
+    const { NofQuestion } = req.body;
+    const totalQuestions = parseInt(NofQuestion, 10);
     
-} );
-
-app.post("/upload", (req, res)=>{
-    const NofQuestion = req.body;
-    const value = NofQuestion.NofQuestion;
-    console.log(value);
-    for(let i = 0; i<=value; i++){
-        res.render("index3.ejs");
+    if (!isNaN(totalQuestions) && totalQuestions > 0) {
+        req.session.totalQuestions = totalQuestions;
+        req.session.currentQuestionIndex = 0;
+        res.redirect("/enter-question");
+    } else {
+        res.status(400).send("Invalid number of questions");
     }
-
 });
 
-app.post("/uploaded", (req, res) => {
+// Route to display the question entry form
+app.get("/enter-question", (req, res) => {
+    const { totalQuestions, currentQuestionIndex } = req.session;
+
+    if (currentQuestionIndex < totalQuestions) {
+        res.render("index3.ejs", { questionNumber: currentQuestionIndex + 1 });
+    } else {
+        res.redirect("/next-task"); // Replace with your next task route
+    }
+});
+
+// Route to handle question submission
+app.post("/submit-question", (req, res) => {
     const { question, option1, option2, option3, option4, correctans } = req.body;
-    
-    db.query(`INSERT INTO QUESTIONS (questions, option1, option2, option3, option4, correctans) VALUES ($1, $2, $3, $4, $5, $6)`, [question, option1, option2, option3, option4, correctans], (err, result) => {
-        if (!err) {
-            console.log(`Data successfully registered into Table questions`);
-        } else {
-            console.error(err);
-            res.status(500).send("An error occurred while processing your request");
+    const { totalQuestions, currentQuestionIndex } = req.session;
+
+    db.query(
+        `INSERT INTO questions (questions, option1, option2, option3, option4, correctans) VALUES ($1, $2, $3, $4, $5, $6)`,
+        [question, option1, option2, option3, option4, correctans],
+        (err) => {
+            if (!err) {
+                console.log(`Question ${currentQuestionIndex + 1} successfully registered`);
+                req.session.currentQuestionIndex++;
+
+                if (req.session.currentQuestionIndex < totalQuestions) {
+                    res.redirect("/enter-question");
+                } else {
+                    res.redirect("/next-task"); // Replace with your next task route
+                }
+            } else {
+                console.error(err);
+                res.status(500).send("An error occurred while processing your request");
+            }
         }
-    });
+    );
 });
 
+// Replace with your next task route
+app.get("/next-task", (req, res) => {
+    res.send("All questions entered. Proceed to the next task.");
+});

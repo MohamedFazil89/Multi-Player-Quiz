@@ -7,14 +7,22 @@
 </head>
 <body>
     <h1>hello player</h1>
-    <input type="text" id="inputs">
-    <button>send</button>
+    <h3 class="ques"><%= locals.question %></h3>
+    <ul>
+        <li><%=option1%></li>
+        <li><%=option1%></li>
+        <li> <%=option1%> </li>
+        <li><%=option1%></li>
+        
+    </ul>
+    <button>next</button>
 
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
         const inputs = document.getElementById('inputs').value;
+        
 
 
         
