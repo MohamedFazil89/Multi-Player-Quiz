@@ -186,18 +186,32 @@ const server = app.listen(port, () => {
     console.log(`Server is running on the port https://localhost:${port}`);
 });
 
+
+
+// socket code init
+
+let RoomIDs = [];
+
 const io = new Server(server);
 io.on('connection', (socket) => {
-    console.log('a player connected');
+    // console.log('a user connected');
+
+    socket.on('joinroom', (roomid) =>{
+        socket.join(roomid);
+        if(!RoomIDs.includes(roomid)){
+            RoomIDs.push(roomid);
+        }else{
+            console.log("room already exists");
+        }
+        console.log(RoomIDs)
+    })
 
 
     socket.on('disconnect', () => {
-        console.log('player disconnected');
+        // console.log('user disconnected');
     });
 
-
-
-
+// socket code end  
 
 
 
@@ -251,6 +265,10 @@ app.post("/submit-question", (req, res) => {
 });
 
 app.get("/next-task", (req, res) => {
-    res.send("All questions entered. Proceed to the next task.");
+    res.render("room.ejs")
 });
+
+app.get("/join", (req, res) =>{
+    res.send(RoomIDs)
+})
 
