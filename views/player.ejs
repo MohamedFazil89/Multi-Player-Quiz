@@ -7,20 +7,16 @@
 </head>
 <body>
     <h1>hello player</h1>
-    <h3 class="ques"><%= locals.question %></h3>
-    <ul>
-        <li><%=option1%></li>
-        <li><%=option1%></li>
-        <li> <%=option1%> </li>
-        <li><%=option1%></li>
-        
-    </ul>
-    <button>next</button>
+    <form action="/joinRoom">
+    <input type="text" name="roomids" id="room">
+    <button>Join</button>
 
-
+    </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+        const roomid = document.getElementById("room").value;
+        socket.emit("joinRooms", roomid);
         
         
 
