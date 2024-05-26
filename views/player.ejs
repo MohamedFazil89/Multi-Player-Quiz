@@ -8,7 +8,7 @@
 <body>
     <h1>hello player</h1>
     <form action="/joinRoom">
-    <input type="text" name="roomids" id="room">
+    <input type="text" name="roomids" id="room" required>
     <button>Join</button>
 
     </form>
@@ -16,7 +16,7 @@
     <script>
         const socket = io();
         const roomid = document.getElementById("room").value;
-        socket.emit("joinRooms", roomid);
+        socket.emit('joinRooms', roomid);
         
         
 

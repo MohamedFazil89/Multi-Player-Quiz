@@ -11,7 +11,7 @@
     <h1>Room creation page</h1>
 
    <form action="/join" method="get">
-    <input type="text" placeholder="room id" name="roomid" id="room">
+    <input type="text" placeholder="room id" name="roomid" id="room" required>
     <button id="btn">Create</button>
 
    </form>
@@ -21,7 +21,7 @@
        const socket = io();
        function JoinRoom(){
         const roomid = document.getElementById("room").value;
-        socket.emit('joinroom', roomid);
+        socket.emit('createroom', roomid);
        }        
        
        document.getElementById('btn').addEventListener("click", JoinRoom);

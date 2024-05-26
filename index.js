@@ -19,7 +19,7 @@ app.use(express.static("public"));
 
 
 app.use(session({
-    secret: 'thisissecretkeyverystrong', 
+    secret: 'thisissecretkeyverystrong',
     resave: false,
     saveUninitialized: true,
 }));
@@ -55,6 +55,8 @@ const postfunc = (username, email, role, password, res) => {
     });
 }
 
+let hostname;
+
 const checkfunc = (username, password, res, role) => {
     db.query(`SELECT * FROM ${role} WHERE username = $1 AND password = $2`, [username, password], (err, result) => {
         if (!err) {
@@ -62,6 +64,7 @@ const checkfunc = (username, password, res, role) => {
                 console.log("User exists:", result.rows[0], "from " + `${role} table`);
                 if (role == "host") {
                     res.render("index2.ejs");
+                    hostname = result.rows[0].username
 
                 } else {
                     res.redirect("/player");
@@ -190,19 +193,98 @@ const server = app.listen(port, () => {
 // socket code init
 
 let RoomIDs = [];
+let update_arr_state = false;
+let playerstatus;
+
+// POST FUNC
+function postid(id, host, callback) {
+    db.query(`SELECT * FROM ROOMID WHERE host = $1`, [host], (err, result) => {
+        if (err) {
+            console.error(err);
+            if (callback) callback(err, null);
+            return;
+        }
+
+        if (result.rows.length > 0) {
+            // Host already exists
+            console.log('ID exists');
+            if (callback) callback(null, 'ID exists');
+        } else {
+            // Host does not exist, insert the new record
+            db.query(`INSERT INTO ROOMID (IDs, host) VALUES ($1, $2)`, [id, host], (err, res) => {
+                if (!err) {
+                    console.log('Data successfully registered into Table ROOMID');
+                    if (callback) callback(null, 'Data successfully registered');
+                } else {
+                    console.error(err);
+                    if (callback) callback(err, null);
+                }
+            });
+        }
+    });
+}
+
+
+
+// CHECK ROOM ID FUNC
+
+function checkid(roomid){
+    
+db.query(`SELECT * FROM  WHERE IDs = $1 `, [roomid], (err, result) => {
+    if(!err){
+        if(result.rows.length > 0){
+            console.log("room id exist");
+            return true
+        }else{
+            console.log("room id not exist");
+            return false;
+        }
+    }else{
+        console.log(err);
+    }
+    
+});
+}
+
+
+
+
+
+
+
 
 const io = new Server(server);
 io.on('connection', (socket) => {
     // console.log('a user connected');
 
-    socket.on('joinroom', (roomid) =>{
-        socket.join(roomid);
-        if(!RoomIDs.includes(roomid)){
+    socket.on('createroom', (roomid) => {
+        if (!RoomIDs.includes(roomid)) {
             RoomIDs.push(roomid);
-        }else{
+            socket.join(roomid);
+            console.log(hostname);
+            postid(roomid, hostname);
+            update_arr_state = true;
+        } else {
             console.log("room already exists");
+            update_arr_state = false;
+
+
         }
-        console.log(RoomIDs)
+        console.log(RoomIDs);
+    })
+
+    socket.on('joinRooms', (roomid) => {
+
+        if (checkfunc(roomid)) {
+            socket.join(roomid);
+            console.log(`Socket ${socket.id} joined room ${roomid}`);
+            playerstatus = true;
+        } else {
+            console.log("room does not exist");
+            playerstatus = false;
+            console.log(RoomIDs);
+
+        }
     })
 
 
@@ -210,7 +292,7 @@ io.on('connection', (socket) => {
         // console.log('user disconnected');
     });
 
-// socket code end  
+    // socket code end  
 
 
 
@@ -218,7 +300,7 @@ io.on('connection', (socket) => {
 app.post("/upload", (req, res) => {
     const { NofQuestion } = req.body;
     const totalQuestions = parseInt(NofQuestion, 10);
-    
+
     if (!isNaN(totalQuestions) && totalQuestions > 0) {
         req.session.totalQuestions = totalQuestions;
         req.session.currentQuestionIndex = 0;
@@ -234,7 +316,7 @@ app.get("/enter-question", (req, res) => {
     if (currentQuestionIndex < totalQuestions) {
         res.render("index3.ejs", { questionNumber: currentQuestionIndex + 1 });
     } else {
-        res.redirect("/next-task"); 
+        res.redirect("/next-task");
     }
 });
 
@@ -253,7 +335,7 @@ app.post("/submit-question", (req, res) => {
                 if (req.session.currentQuestionIndex < totalQuestions) {
                     res.redirect("/enter-question");
                 } else {
-                    res.redirect("/next-task"); 
+                    res.redirect("/next-task");
                 }
             } else {
                 console.error(err);
@@ -267,7 +349,18 @@ app.get("/next-task", (req, res) => {
     res.render("room.ejs")
 });
 
-app.get("/join", (req, res) =>{
-    res.send(RoomIDs)
+app.get("/join", (req, res) => {
+    if (update_arr_state == true) {
+        res.render("host.ejs")
+    } else {
+        res.send("Room id not avalable")
+    }
 })
 
+app.get("/joinRoom", (req, res) => {
+    if (playerstatus) {
+        res.send("joined room");
+    } else {
+        res.send("room not avalable")
+    }
+})
