@@ -209,8 +209,9 @@ let update_arr_state = false;
 let playerstatus;
 
 // POST FUNC
+let poststatus = false;
 function postid(id, host, callback) {
-    db.query(`SELECT * FROM ROOMID WHERE host = $1 AND IDs = $2`, [host, id], (err, result) => {
+    db.query(`SELECT * FROM ROOMID WHERE host = $1 OR IDs = $2`, [host, id], (err, result) => {
         if (err) {
             console.error(err);
             if (callback) callback(err, null);
@@ -226,7 +227,9 @@ function postid(id, host, callback) {
             db.query(`INSERT INTO ROOMID (IDs, host) VALUES ($1, $2)`, [id, host], (err, res) => {
                 if (!err) {
                     console.log('Data successfully registered into Table ROOMID');
+                    poststatus = true;
                     if (callback) callback(null, 'Data successfully registered');
+
                 } else {
                     console.error(err);
                     if (callback) callback(err, null);
