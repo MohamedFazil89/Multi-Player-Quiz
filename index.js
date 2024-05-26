@@ -252,7 +252,7 @@ function checkid(roomid) {
                 return false;
             }
         } else {
-            console.log(err);
+            console.error(err);
         }
 
     });
