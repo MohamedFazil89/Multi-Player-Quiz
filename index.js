@@ -114,51 +114,9 @@ app.post("/submit", (req, res) => {
 });
 
 app.get("/player", (req, res) => {
-    db.query("SELECT * FROM questions", (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-
-        let rows = JSON.stringify(result.rows);
-        rows = JSON.parse(rows);
-
-
-        if (rows.length === 0) {
-            res.status(404).send('No questions found');
-            return;
-        }
-
-        let value;
-        let options1;
-        let options2;
-        let options3;
-        let options4;
-
-        for (let i = 0; i < rows.length; i++) {
-            value = rows[i].questions;
-            options1 = rows[i].option1;
-            options2 = rows[i].option2;
-            options3 = rows[i].option3;
-            options4 = rows[i].option4;
-
-
-        }
-
-        console.log("value", value);
-
-
-        res.render("player.ejs", {
-            question: value,
-            option1: options1,
-            option1: options1,
-            option1: options1,
-            option1: options1,
-
-        });
-    });
+    res.render("player.ejs")
 });
+
 
 
 app.get("/list", (req, res) => {
@@ -219,11 +177,9 @@ function postid(id, host, callback) {
         }
 
         if (result.rows.length > 0) {
-            // Host already exists
             console.log('ID exists');
             if (callback) callback(null, 'host exists');
         } else {
-            // Host does not exist, insert the new record
             db.query(`INSERT INTO ROOMID (IDs, host) VALUES ($1, $2)`, [id, host], (err, res) => {
                 if (!err) {
                     console.log('Data successfully registered into Table ROOMID');
@@ -245,7 +201,7 @@ function postid(id, host, callback) {
 
 function checkid(roomid) {
 
-    db.query(`SELECT * FROM  WHERE IDs = $1 `, [roomid], (err, result) => {
+    db.query(`SELECT * FROM ROOMID WHERE IDs = $1 `, [roomid], (err, result) => {
         if (!err) {
             if (result.rows.length > 0) {
                 console.log("room id exist");
@@ -290,7 +246,7 @@ io.on('connection', (socket) => {
 
     socket.on('joinRooms', (roomid) => {
 
-        if (checkfunc(roomid)) {
+        if (checkid(roomid)) {
             socket.join(roomid);
             console.log(`Socket ${socket.id} joined room ${roomid}`);
             playerstatus = true;

@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>player</title>
+    <title>Player</title>
 </head>
 <body>
-    <h1>hello player</h1>
-    <form action="/joinRoom">
-    <input type="text" name="roomids" id="room" required>
-    <button>Join</button>
-
+    <h1>Hello Player</h1>
+    <form id="joinForm">
+        <input type="text" name="roomids" id="room" required>
+        <button type="submit">Join</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        const roomid = document.getElementById("room").value;
-        socket.emit('joinRooms', roomid);
         
+        document.getElementById('joinForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting in the traditional way
+            const roomid = document.getElementById('room').value;
+            if (roomid) {
+                socket.emit('joinRooms', roomid);
+                console.log(`Requested to join room: ${roomid}`);
+            } else {
+                console.log('Room ID is required.');
+            }
+        });
         
-
-
-        
-         
+        socket.on('error', function(message) {
+            alert(message); // Show error message to the user
+        });
     </script>
 </body>
 </html>
