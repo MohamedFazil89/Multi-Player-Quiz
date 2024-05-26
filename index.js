@@ -191,14 +191,26 @@ const server = app.listen(port, () => {
 
 
 // socket code init
-
 let RoomIDs = [];
+
+
+db.query(`Select * from ROOMID`, (err, result) => {
+    if (err) {
+        console.log(err);
+    } else {
+        RoomIDs = result.rows;
+
+        // console.log(result.rows);
+    }
+    console.log(RoomIDs)
+
+})
 let update_arr_state = false;
 let playerstatus;
 
 // POST FUNC
 function postid(id, host, callback) {
-    db.query(`SELECT * FROM ROOMID WHERE host = $1`, [host], (err, result) => {
+    db.query(`SELECT * FROM ROOMID WHERE host = $1 AND IDs = $2`, [host, id], (err, result) => {
         if (err) {
             console.error(err);
             if (callback) callback(err, null);
@@ -208,7 +220,7 @@ function postid(id, host, callback) {
         if (result.rows.length > 0) {
             // Host already exists
             console.log('ID exists');
-            if (callback) callback(null, 'ID exists');
+            if (callback) callback(null, 'host exists');
         } else {
             // Host does not exist, insert the new record
             db.query(`INSERT INTO ROOMID (IDs, host) VALUES ($1, $2)`, [id, host], (err, res) => {
@@ -228,22 +240,22 @@ function postid(id, host, callback) {
 
 // CHECK ROOM ID FUNC
 
-function checkid(roomid){
-    
-db.query(`SELECT * FROM  WHERE IDs = $1 `, [roomid], (err, result) => {
-    if(!err){
-        if(result.rows.length > 0){
-            console.log("room id exist");
-            return true
-        }else{
-            console.log("room id not exist");
-            return false;
+function checkid(roomid) {
+
+    db.query(`SELECT * FROM  WHERE IDs = $1 `, [roomid], (err, result) => {
+        if (!err) {
+            if (result.rows.length > 0) {
+                console.log("room id exist");
+                return true
+            } else {
+                console.log("room id not exist");
+                return false;
+            }
+        } else {
+            console.log(err);
         }
-    }else{
-        console.log(err);
-    }
-    
-});
+
+    });
 }
 
 
