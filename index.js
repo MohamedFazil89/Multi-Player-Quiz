@@ -120,7 +120,7 @@ app.get("/player", (req, res) => {
 
 app.get("/list", (req, res) => {
     var val = '';
-    db.query('select * from = questions', (err, results) => {
+    db.query('select * from questions', (err, results) => {
         if (!err) {
             val = JSON.stringify(results.rows);
             console.log(val);
