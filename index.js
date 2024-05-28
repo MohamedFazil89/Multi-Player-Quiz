@@ -347,14 +347,14 @@ app.post("/submit-question", (req, res) => {
     );
 });
 
-// ----------------------------------- \\
+// --------------Room-id-page-for-host--------------------- \\
 
 
 app.get("/next-task", (req, res) => {
     res.render("room.ejs");
 });
 
-// ----------------------------------- \\
+// ---------------Join-Route-------------------- \\
 
 
 app.get("/join", (req, res) => {
