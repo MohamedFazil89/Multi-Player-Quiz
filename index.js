@@ -49,7 +49,6 @@ const postfunc = (username, email, role, password, res) => {
             console.log(err);
             errs = "username must be unique";
             status = false;
-
         }
 
     });
@@ -60,9 +59,9 @@ let hostname;
 const checkfunc = (username, password, res, role) => {
     db.query(`SELECT * FROM ${role} WHERE username = $1 AND password = $2`, [username, password], (err, result) => {
         if (!err) {
-            if (result.rows.length > 0) {
+            if (result.rows.length > 0){
                 console.log("User exists:", result.rows[0], "from " + `${role} table`);
-                if (role == "host") {
+                if (role == "host"){
                     res.render("index2.ejs");
                     hostname = result.rows[0].username
 
@@ -83,7 +82,7 @@ const checkfunc = (username, password, res, role) => {
 
 
 app.get("/", (req, res) => {
-    db.query("select * from player", (err, result) => {
+    db.query("select * from player", (err, result) =>{
         if (err) {
             console.log(err);
             res.status(500).send('Internal Server Error');
@@ -95,7 +94,7 @@ app.get("/", (req, res) => {
 
 })
 
-app.post("/login", (req, res) => {
+app.post("/login", (req, res) =>{
     const { username, password, role } = req.body;
     checkfunc(username, password, res, role);
 
