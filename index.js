@@ -55,6 +55,7 @@ const postfunc = (username, email, role, password, res) => {
 }
 
 let hostname;
+let playername;
 
 const checkfunc = (username, password, res, role) => {
     db.query(`SELECT * FROM ${role} WHERE username = $1 AND password = $2`, [username, password], (err, result) => {
@@ -67,6 +68,8 @@ const checkfunc = (username, password, res, role) => {
 
                 } else {
                     res.redirect("/player");
+                    playername = result.rows[0].username
+
                 }
 
             } else {
@@ -163,7 +166,7 @@ db.query(`Select * from ROOMID`, (err, result) => {
 
 })
 let update_arr_state = false;
-let playerstatus;
+let playerstatus = false;
 
 // POST FUNC
 let poststatus = false;
@@ -197,28 +200,21 @@ function postid(id, host, callback) {
 
 
 // CHECK ROOM ID FUNC
-let roomstatus = false;
-
-function checkid(roomid) {
-
-    db.query(`SELECT * FROM ROOMID WHERE IDs = $1 `, [roomid], (err, result) => {
-        if (!err) {
-            if (result.rows.length > 0) {
-                console.log("room id exist");
-                roomstatus = true
-            } else {
-                console.log("room id not exist");
-            }
-        } else {
+function checkid(roomid, callback) {
+    db.query(`SELECT * FROM ROOMID WHERE IDs = $1`, [roomid], (err, result) => {
+        if (err) {
             console.error(err);
+            callback(false);
+        } else {
+            if (result.rows.length > 0) {
+                console.log("room id exists");
+                callback(true);
+            } else {
+                console.log("room id does not exist");
+                callback(false);
+            }
         }
-
     });
-    if(roomstatus){
-        return true
-    }else{
-        return false
-    }
 }
 
 
@@ -248,20 +244,24 @@ io.on('connection', (socket) => {
         console.log(RoomIDs);
     })
 
-    socket.on('joinRooms', async (roomid) => {
-        const status = await checkid(roomid)          
-            console.log(roomid)
+    socket.on('joinRooms',  (roomid) => {
+        // console.log(roomid)
+        checkid(roomid, (status) => {
             if (status) {
                 socket.join(roomid);
-                console.log(`Socket ${socket.id} joined room ${roomid}`);
+                console.log(`Socket ${socket.id}, ${playername} joined room ${roomid}`);
                 playerstatus = true;
             } else {
                 console.log("room does not exist");
-                playerstatus = false;
-                console.log(RoomIDs);
+                console.log("status:", status)
+                // console.log(RoomIDs);
 
             }
-        
+
+        });
+
+
+
 
 
     })
