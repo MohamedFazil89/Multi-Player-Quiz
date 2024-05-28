@@ -160,7 +160,6 @@ db.query(`Select * from ROOMID`, (err, result) => {
     } else {
         RoomIDs = result.rows;
 
-        // console.log(result.rows);
     }
     console.log(RoomIDs)
 
@@ -180,6 +179,7 @@ function postid(id, host, callback) {
 
         if (result.rows.length > 0) {
             console.log('ID exists');
+            poststatus = true;
             if (callback) callback(null, 'host exists');
         } else {
             db.query(`INSERT INTO ROOMID (IDs, host) VALUES ($1, $2)`, [id, host], (err, res) => {
@@ -230,14 +230,14 @@ io.on('connection', (socket) => {
 
     socket.on('createroom', (roomid) => {
         if (!RoomIDs.includes(roomid)) {
-            RoomIDs.push(roomid);
+            // RoomIDs.push(roomid);
             socket.join(roomid);
             console.log(hostname);
             postid(roomid, hostname);
-            update_arr_state = true;
+            // update_arr_state = true;
         } else {
             console.log("room already exists");
-            update_arr_state = false;
+            // update_arr_state = false;
 
 
         }
@@ -329,7 +329,7 @@ app.get("/next-task", (req, res) => {
 });
 
 app.get("/join", (req, res) => {
-    if (update_arr_state == true) {
+    if (poststatus) {
         res.render("host.ejs");
     } else {
         res.send("Room id not avalable");
