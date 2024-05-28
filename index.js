@@ -59,9 +59,9 @@ let hostname;
 const checkfunc = (username, password, res, role) => {
     db.query(`SELECT * FROM ${role} WHERE username = $1 AND password = $2`, [username, password], (err, result) => {
         if (!err) {
-            if (result.rows.length > 0){
+            if (result.rows.length > 0) {
                 console.log("User exists:", result.rows[0], "from " + `${role} table`);
-                if (role == "host"){
+                if (role == "host") {
                     res.render("index2.ejs");
                     hostname = result.rows[0].username
 
@@ -82,7 +82,7 @@ const checkfunc = (username, password, res, role) => {
 
 
 app.get("/", (req, res) => {
-    db.query("select * from player", (err, result) =>{
+    db.query("select * from player", (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send('Internal Server Error');
@@ -94,7 +94,7 @@ app.get("/", (req, res) => {
 
 })
 
-app.post("/login", (req, res) =>{
+app.post("/login", (req, res) => {
     const { username, password, role } = req.body;
     checkfunc(username, password, res, role);
 
@@ -197,6 +197,7 @@ function postid(id, host, callback) {
 
 
 // CHECK ROOM ID FUNC
+let roomstatus = false;
 
 function checkid(roomid) {
 
@@ -204,16 +205,20 @@ function checkid(roomid) {
         if (!err) {
             if (result.rows.length > 0) {
                 console.log("room id exist");
-                return true
+                roomstatus = true
             } else {
                 console.log("room id not exist");
-                return false;
             }
         } else {
             console.error(err);
         }
 
     });
+    if(roomstatus){
+        return true
+    }else{
+        return false
+    }
 }
 
 
@@ -243,18 +248,22 @@ io.on('connection', (socket) => {
         console.log(RoomIDs);
     })
 
-    socket.on('joinRooms', (roomid) => {
+    socket.on('joinRooms', async (roomid) => {
+        const status = await checkid(roomid)          
+            console.log(roomid)
+            if (status) {
+                socket.join(roomid);
+                console.log(`Socket ${socket.id} joined room ${roomid}`);
+                playerstatus = true;
+            } else {
+                console.log("room does not exist");
+                playerstatus = false;
+                console.log(RoomIDs);
 
-        if (checkid(roomid)) {
-            socket.join(roomid);
-            console.log(`Socket ${socket.id} joined room ${roomid}`);
-            playerstatus = true;
-        } else {
-            console.log("room does not exist");
-            playerstatus = false;
-            console.log(RoomIDs);
+            }
+        
 
-        }
+
     })
 
 
@@ -316,14 +325,14 @@ app.post("/submit-question", (req, res) => {
 });
 
 app.get("/next-task", (req, res) => {
-    res.render("room.ejs")
+    res.render("room.ejs");
 });
 
 app.get("/join", (req, res) => {
     if (update_arr_state == true) {
-        res.render("host.ejs")
+        res.render("host.ejs");
     } else {
-        res.send("Room id not avalable")
+        res.send("Room id not avalable");
     }
 })
 
@@ -331,6 +340,6 @@ app.get("/joinRoom", (req, res) => {
     if (playerstatus) {
         res.send("joined room");
     } else {
-        res.send("room not avalable")
+        res.send("room not avalable");
     }
 })

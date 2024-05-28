@@ -16,7 +16,7 @@
         const socket = io();
         
         document.getElementById('joinForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting in the traditional way
+            event.preventDefault(); 
             const roomid = document.getElementById('room').value;
             if (roomid) {
                 socket.emit('joinRooms', roomid);
