@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Hello Player</h1>
-    <form  action="/joinRoom" id="joinForm">
+    <form  action="/joinRoom" id="joinForm" method="GET">
         <input type="text" name="roomids" id="room" required>
         <button type="submit">Join</button>
     </form>
@@ -21,6 +21,7 @@
             if (roomid) {
                 socket.emit('joinRooms', roomid);
                 console.log(`Requested to join room: ${roomid}`);
+                window.location.href = "/joinRoom"
             } else {
                 console.log('Room ID is required.');
             }

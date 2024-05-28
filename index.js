@@ -4,25 +4,25 @@ import pg from "pg";
 import { Server } from "socket.io";
 import session from "express-session";
 
-
-
 const app = express();
-
-
-
 const port = 3000;
+
+// --------------Middlewere-------------------- \\
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.static("public"));
 
+// -------------Session manage---------------------- \\
 
 app.use(session({
     secret: 'thisissecretkeyverystrong',
     resave: false,
     saveUninitialized: true,
 }));
+
+// -------------Database-connect---------------------- \\
+
 
 const db = new pg.Client({
     user: 'postgres',
@@ -35,10 +35,10 @@ const db = new pg.Client({
 db.connect();
 
 
+
+// ---------------Post-function-------------------- \\
 let errs = "";
 let status = false;
-
-
 
 const postfunc = (username, email, role, password, res) => {
     db.query(`insert into ${role} (username, email, password) values ($1, $2, $3)`, [username, email, password], (err, res) => {
@@ -53,6 +53,9 @@ const postfunc = (username, email, role, password, res) => {
 
     });
 }
+
+// --------------Login-check-function--------------------- \\
+
 
 let hostname;
 let playername;
@@ -83,6 +86,9 @@ const checkfunc = (username, password, res, role) => {
 
 }
 
+// ----------------Routes------------------- \\
+
+
 
 app.get("/", (req, res) => {
     db.query("select * from player", (err, result) => {
@@ -97,6 +103,9 @@ app.get("/", (req, res) => {
 
 })
 
+// ---------------login-route-------------------- \\
+
+
 app.post("/login", (req, res) => {
     const { username, password, role } = req.body;
     checkfunc(username, password, res, role);
@@ -104,6 +113,9 @@ app.post("/login", (req, res) => {
 
 
 })
+
+// -----------------submit-route------------------ \\
+
 
 app.post("/submit", (req, res) => {
     const { username, password, role, email } = req.body;
@@ -115,11 +127,16 @@ app.post("/submit", (req, res) => {
 
 });
 
+// --------------player-route--------------------- \\
+
+
 app.get("/player", (req, res) => {
     res.render("player.ejs")
 });
 
 
+
+// ----------------list-data-in-db------------------- \\
 
 app.get("/list", (req, res) => {
     var val = '';
@@ -143,6 +160,9 @@ app.get("/list", (req, res) => {
 
 })
 
+// ---------------server-port-------------------- \\
+
+
 
 const server = app.listen(port, () => {
     console.log(`Server is running on the port https://localhost:${port}`);
@@ -150,7 +170,8 @@ const server = app.listen(port, () => {
 
 
 
-// socket code init
+// ---------------Web-Socket-function-Init-------------------- \\
+
 let RoomIDs = [];
 
 
@@ -164,7 +185,11 @@ db.query(`Select * from ROOMID`, (err, result) => {
     console.log(RoomIDs)
 
 })
-let update_arr_state = false;
+
+// -------------PostID---------------------- \\
+
+
+// let update_arr_state = false;
 let playerstatus = false;
 
 // POST FUNC
@@ -198,6 +223,7 @@ function postid(id, host, callback) {
 }
 
 
+// ------------------CheckID----------------- \\
 
 // CHECK ROOM ID FUNC
 function checkid(roomid, callback) {
@@ -219,10 +245,7 @@ function checkid(roomid, callback) {
 
 
 
-
-
-
-
+// ---------------Socket-Connections-Code-------------------- \\
 
 const io = new Server(server);
 io.on('connection', (socket) => {
@@ -259,23 +282,17 @@ io.on('connection', (socket) => {
             }
 
         });
-
-
-
-
-
     })
-
 
     socket.on('disconnect', () => {
         // console.log('user disconnected');
     });
 
     // socket code end  
-
-
-
 });
+
+// ---------------Routes-------------------- \\
+
 app.post("/upload", (req, res) => {
     const { NofQuestion } = req.body;
     const totalQuestions = parseInt(NofQuestion, 10);
@@ -289,6 +306,8 @@ app.post("/upload", (req, res) => {
     }
 });
 
+// ------------Question-loop-logic----------------------- \\
+
 app.get("/enter-question", (req, res) => {
     const { totalQuestions, currentQuestionIndex } = req.session;
 
@@ -298,6 +317,10 @@ app.get("/enter-question", (req, res) => {
         res.redirect("/next-task");
     }
 });
+
+
+// -------------Submit-Routes---------------------- \\
+
 
 app.post("/submit-question", (req, res) => {
     const { question, option1, option2, option3, option4, correctans } = req.body;
@@ -324,9 +347,15 @@ app.post("/submit-question", (req, res) => {
     );
 });
 
+// ----------------------------------- \\
+
+
 app.get("/next-task", (req, res) => {
     res.render("room.ejs");
 });
+
+// ----------------------------------- \\
+
 
 app.get("/join", (req, res) => {
     if (poststatus) {
@@ -336,10 +365,21 @@ app.get("/join", (req, res) => {
     }
 })
 
+// --------------Player-Join-Route--------------------- \\
+
+
 app.get("/joinRoom", (req, res) => {
     if (playerstatus) {
-        res.send("joined room");
+        res.render("main.ejs");
+        // console.log(playerstatus)
     } else {
         res.send("room not avalable");
     }
 })
+
+// --------------Part-1-End-------------------- \\
+
+
+// logic for question render in main page 
+
+
