@@ -5,23 +5,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <title>Quiz</title>
+    <link rel="stylesheet" href="styles/main3.css">
 </head>
 <body>
-    <h1>Questions</h1>
-    <ul>
-        <% questions.forEach(question => { %>
-            <li>
-                <h3><%= question.questions %></h3>
+    <h1>Quiz</h1>
+    <form action="/submit-quiz" method="POST">
+        <% questions.forEach((question, index) => { %>
+            <div class="question">
+                <h3><%= index + 1 %>. <%= question.questions %></h3>
                 <ul>
-                    <li>Option 1: <%= question.option1 %></li>
-                    <li>Option 2: <%= question.option2 %></li>
-                    <li>Option 3: <%= question.option3 %></li>
-                    <li>Option 4: <%= question.option4 %></li>
-                    <li>Correct Answer: <%= question.correctans %></li>
+                    <li><input type="radio" name="answer<%= index %>" value="option1"> <%= question.option1 %></li>
+                    <li><input type="radio" name="answer<%= index %>" value="option2"> <%= question.option2 %></li>
+                    <li><input type="radio" name="answer<%= index %>" value="option3"> <%= question.option3 %></li>
+                    <li><input type="radio" name="answer<%= index %>" value="option4"> <%= question.option4 %></li>
                 </ul>
-            </li>
+            </div>
         <% }); %>
-    </ul>
+        <button type="submit">Submit Quiz</button>
+    </form>
 </body>
 </html>
