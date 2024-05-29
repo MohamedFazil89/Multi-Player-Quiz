@@ -398,3 +398,34 @@ app.get("/joinRoom", (req, res) => {
 // logic for question render in main page 
 
 
+// Handle the form submission for the quiz
+app.post("/submit-quiz", (req, res) => {
+    const submittedAnswers = req.body; // Submitted answers from the form
+    let score = 0;
+
+    // Retrieve correct answers from the database
+    db.query('SELECT * FROM questions', (err, results) => {
+        if (err) {
+            console.error("Error fetching questions:", err);
+            res.status(500).send("An error occurred while fetching questions");
+            return;
+        }
+
+        const correctAnswers = results.rows;
+
+        // Compare user's answers with correct answers
+        correctAnswers.forEach((question, index) => {
+            const correctAnswer = question.correctans;
+            const userAnswer = submittedAnswers[`answer${index}`];
+            if (correctAnswer === userAnswer) {
+                score++;
+            }
+        });
+
+        // Provide feedback to the user
+        res.render("quiz-feedback.ejs", { score, totalQuestions: correctAnswers.length });
+    });
+});
+
+
+
