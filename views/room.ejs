@@ -10,30 +10,26 @@
 <body>
     <h1>Room creation page</h1>
 
-    <form action="/join" method="get">
-        <input type="number" placeholder="room id" name="roomid" id="room" required>
-        <button id="btn">Create</button>
+   <form action="/join" method="get">
+    <input type="number" placeholder="room id" name="roomid" id="room" required>
+    <button id="btn">Create</button>
 
-    </form>
+   </form>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io({
-            query: {
-                hostname: '<%= req.session.hostname %>'
-            }
-        })      
-         function JoinRoom() {
-            const roomid = document.getElementById("room").value;
-            socket.emit('createroom', roomid);
-        }
-
-        document.getElementById('btn').addEventListener("click", JoinRoom);
+   <script src="/socket.io/socket.io.js"></script>
+   <script>
+       const socket = io();
+       function JoinRoom(){
+        const roomid = document.getElementById("room").value;
+        socket.emit('createroom', roomid);
+       }        
+       
+       document.getElementById('btn').addEventListener("click", JoinRoom);
 
 
-
-
-    </script>
+       
+        
+   </script>
 
 
 </body>

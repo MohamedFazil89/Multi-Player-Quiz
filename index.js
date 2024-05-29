@@ -371,16 +371,9 @@ app.get("/join", (req, res) => {
 // --------------Player-Join-Route--------------------- \\
 
 
-app.get("/joinRoom", async (req, res) => {
+app.get("/joinRoom", (req, res) => {
     if (playerstatus) {
-        try {
-            const result = await db.query('SELECT * FROM questions');
-            const questions = result.rows;
-            res.render("main.ejs", { questions });
-        } catch (err) {
-            console.error("Error fetching questions:", err);
-            res.status(500).send("An error occurred while fetching questions.");
-        }
+        res.render("main.ejs");
         // console.log(playerstatus)
     } else {
         res.send("room not avalable");
