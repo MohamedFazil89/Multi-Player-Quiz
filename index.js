@@ -247,6 +247,8 @@ function checkid(roomid, callback) {
 
 // ---------------Socket-Connections-Code-------------------- \\
 
+let NumofPlayer = 0;
+
 const io = new Server(server);
 io.on('connection', (socket) => {
     // console.log('a user connected');
@@ -272,7 +274,8 @@ io.on('connection', (socket) => {
         checkid(roomid, (status) => {
             if (status) {
                 socket.join(roomid);
-                console.log(`Socket ${socket.id}, ${playername} joined room ${roomid}`);
+                console.log(`Socket ${socket.id} joined room ${roomid}`);
+                console.log(++NumofPlayer)
                 playerstatus = true;
             } else {
                 console.log("room does not exist");
@@ -327,8 +330,8 @@ app.post("/submit-question", (req, res) => {
     const { totalQuestions, currentQuestionIndex } = req.session;
 
     db.query(
-        `INSERT INTO questions (questions, option1, option2, option3, option4, correctans) VALUES ($1, $2, $3, $4, $5, $6)`,
-        [question, option1, option2, option3, option4, correctans],
+        `INSERT INTO questions (host, questions, option1, option2, option3, option4, correctans) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [hostname,question, option1, option2, option3, option4, correctans],
         (err) => {
             if (!err) {
                 console.log(`Question ${currentQuestionIndex + 1} successfully registered`);
