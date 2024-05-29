@@ -1,11 +1,27 @@
+<!-- main.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Main Page</title>
 </head>
 <body>
-    <h1>main page</h1>
+    <h1>Questions</h1>
+    <ul>
+        <% questions.forEach(question => { %>
+            <li>
+                <h3><%= question.questions %></h3>
+                <ul>
+                    <li>Option 1: <%= question.option1 %></li>
+                    <li>Option 2: <%= question.option2 %></li>
+                    <li>Option 3: <%= question.option3 %></li>
+                    <li>Option 4: <%= question.option4 %></li>
+                    <li>Correct Answer: <%= question.correctans %></li>
+                </ul>
+            </li>
+        <% }); %>
+    </ul>
 </body>
 </html>

@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 import session from "express-session";
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // --------------Middlewere-------------------- \\
 
@@ -371,14 +371,26 @@ app.get("/join", (req, res) => {
 // --------------Player-Join-Route--------------------- \\
 
 
+// Update the route handler for main.ejs to fetch questions
 app.get("/joinRoom", (req, res) => {
     if (playerstatus) {
-        res.render("main.ejs");
-        // console.log(playerstatus)
+        // Fetch questions from the database
+        db.query('SELECT * FROM questions', (err, results) => {
+            if (err) {
+                console.error("Error fetching questions:", err);
+                res.status(500).send("An error occurred while fetching questions");
+                return;
+            }
+            
+            const questions = results.rows;
+            
+            // Render main.ejs and pass the questions data
+            res.render("main.ejs", { questions });
+        });
     } else {
-        res.send("room not avalable");
+        res.send("Room not available");
     }
-})
+});
 
 // --------------Part-1-End-------------------- \\
 
