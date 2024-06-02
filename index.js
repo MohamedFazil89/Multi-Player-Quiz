@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 import session from "express-session";
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 // --------------Middlewere-------------------- \\
 
@@ -253,6 +253,11 @@ const io = new Server(server);
 io.on('connection', (socket) => {
     // console.log('a user connected');
 
+    socket.on('hostConnect',(value) =>{
+        console.log("host connected");
+        console.log(value);
+    })
+
     socket.on('createroom', (roomid) => {
         if (!RoomIDs.includes(roomid)) {
             // RoomIDs.push(roomid);
@@ -266,6 +271,10 @@ io.on('connection', (socket) => {
 
 
         }
+
+        socket.on('playerConnect', (value) =>{
+            console.log("a player connected")
+        })
         console.log(RoomIDs);
     })
 
@@ -398,12 +407,12 @@ app.get("/joinRoom", (req, res) => {
 // logic for question render in main page 
 
 
-// Handle the form submission for the quiz
 app.post("/submit-quiz", (req, res) => {
-    const submittedAnswers = req.body; // Submitted answers from the form
+    const submittedAnswers = req.body; // Object containing submitted answers from the form
+    console.log("Submitted Answers:", submittedAnswers); // Debugging: Log submitted answers
     let score = 0;
 
-    // Retrieve correct answers from the database
+    // Retrieve the correct answers from the database
     db.query('SELECT * FROM questions', (err, results) => {
         if (err) {
             console.error("Error fetching questions:", err);
@@ -413,17 +422,21 @@ app.post("/submit-quiz", (req, res) => {
 
         const correctAnswers = results.rows;
 
-        // Compare user's answers with correct answers
+        // Compare the user's answers with the correct answers
         correctAnswers.forEach((question, index) => {
             const correctAnswer = question.correctans;
             const userAnswer = submittedAnswers[`answer${index}`];
+            console.log(`Question ${index + 1}: Correct Answer - ${correctAnswer}, User Answer - ${userAnswer}`); // Debugging: Log correct and user answers
             if (correctAnswer === userAnswer) {
                 score++;
             }
         });
 
-        // Provide feedback to the user
-        res.render("quiz-feedback.ejs", { score, totalQuestions: correctAnswers.length });
+        // Calculate the total number of questions
+        const totalQuestions = correctAnswers.length;
+
+        // Render the feedback page with the user's score
+        res.render("quiz-feedback.ejs", { score, totalQuestions });
     });
 });
 
