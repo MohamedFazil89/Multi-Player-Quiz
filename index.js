@@ -249,6 +249,7 @@ function checkid(roomid, callback) {
 
 let NumofPlayer = 0;
 let connectedPlayers = [];
+let roomids;
 
 
 const io = new Server(server);
@@ -281,6 +282,7 @@ io.on('connection', (socket) => {
         // console.log(roomid)
         checkid(roomid, (status) => {
             if (status) {
+                roomids = roomid
                 socket.join(roomid);
                 console.log(`Socket ${socket.id} joined room ${roomid}`);
                 console.log(++NumofPlayer)
@@ -394,10 +396,13 @@ app.get("/join", (req, res) => {
 
 
 // Update the route handler for main.ejs to fetch questions
-app.get("/joinRoom", (req, res) => {
+app.get("/joinRoom", async (req, res) => {
+    console.log(roomids);
     if (playerstatus) {
         // Fetch questions from the database
-        db.query('SELECT * FROM questions', (err, results) => {
+        const hostq = await db.query('select host from roomid where ids = $1',[roomids])
+        console.log(hostq.rows[0].host)
+        db.query('SELECT * FROM questions where host = $1',[hostq.rows[0].host], (err, results) => {
             if (err) {
                 console.error("Error fetching questions:", err);
                 res.status(500).send("An error occurred while fetching questions");

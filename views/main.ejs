@@ -10,6 +10,7 @@
 
 <body>
     <h1>Quiz</h1>
+    <h2>Questions from <%= questions.host %></h2>
     <form action="/submit-quiz" method="POST">
         <% questions.forEach((question, index)=> { %>
             <div class="question">
