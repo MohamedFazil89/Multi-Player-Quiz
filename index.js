@@ -300,7 +300,7 @@ io.on('connection', (socket) => {
 
     socket.on('playerConnect', (value) =>{
         connectedPlayers.push(socket.id);
-        console.log(value)
+        console.log(value);
         io.emit('updatePlayerList', connectedPlayers);
 
     })
