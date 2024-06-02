@@ -8,16 +8,28 @@
 </head>
 <body>
     <h1>Host main page</h1>
-
-
-
-
+    <h2>Connected Players:</h2>
+    <ul id="playerList"><%=playerlist %></ul>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
        const socket = io();
-       socket.emit('hostConnect',"this is host")
 
+       // Listen for updates to the player list
+       socket.on('updatePlayerList', (players) => {
+           const playerList = document.getElementById('playerList');
+           // Clear previous player list
+        //    playerList.innerHTML = '';
+           // Add each player to the list
+           players.forEach(playerId => {
+               const playerItem = document.createElement('li');
+               playerItem.textContent = playerId;
+               playerList.appendChild(playerItem);
+           });
+       });
+
+       // Emit hostConnect event
+       socket.emit('hostConnect', "this is host");
     </script>
 </body>
 </html>

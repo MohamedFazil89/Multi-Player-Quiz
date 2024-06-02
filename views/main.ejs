@@ -18,19 +18,19 @@
                 </h3>
                 <ul>
                     <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= questions.option1 %>">
+                        <input type="radio" name="answer<%= index %>" value="<%= questions.option1 %>" required>
                         <%= question.option1 %>
                     </li>
                     <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= question.option2 %>">
+                        <input type="radio" name="answer<%= index %>" value="<%= question.option2 %>" required>
                         <%= question.option2 %>
                     </li>
                     <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= question.option3 %>">
+                        <input type="radio" name="answer<%= index %>" value="<%= question.option3 %>" required>
                         <%= question.option3 %>
                     </li>
                     <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= question.option4 %>">
+                        <input type="radio" name="answer<%= index %>" value="<%= question.option4 %>" required>
                         <%= question.option4 %>
                     </li>
                 </ul>
@@ -43,7 +43,7 @@
     <script>
         const socket = io();
         var values = document.
-        socket.emit('playerConnect', )
+        socket.emit('playerConnect', "a player connected" )
     </script>
 </body>
 

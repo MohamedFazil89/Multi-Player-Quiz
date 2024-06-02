@@ -248,6 +248,8 @@ function checkid(roomid, callback) {
 // ---------------Socket-Connections-Code-------------------- \\
 
 let NumofPlayer = 0;
+let connectedPlayers = [];
+
 
 const io = new Server(server);
 io.on('connection', (socket) => {
@@ -271,10 +273,7 @@ io.on('connection', (socket) => {
 
 
         }
-
-        socket.on('playerConnect', (value) =>{
-            console.log("a player connected")
-        })
+       
         console.log(RoomIDs);
     })
 
@@ -296,8 +295,22 @@ io.on('connection', (socket) => {
         });
     })
 
+
+
+
+    socket.on('playerConnect', (value) =>{
+        connectedPlayers.push(socket.id);
+        console.log(value)
+        io.emit('updatePlayerList', connectedPlayers);
+
+    })
+
     socket.on('disconnect', () => {
         // console.log('user disconnected');
+        connectedPlayers = connectedPlayers.filter(playerId => playerId !== socket.id);
+        io.emit('updatePlayerList', connectedPlayers);
+
+
     });
 
     // socket code end  
@@ -371,7 +384,7 @@ app.get("/next-task", (req, res) => {
 
 app.get("/join", (req, res) => {
     if (poststatus) {
-        res.render("host.ejs");
+        res.render("host.ejs", { playerlist: connectedPlayers });
     } else {
         res.send("Room id not avalable");
     }
