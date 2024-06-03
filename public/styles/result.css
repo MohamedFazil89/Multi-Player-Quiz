@@ -1,0 +1,40 @@
+/* styles/main3.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    background-image: url('./assets/2151038309.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+h1 {
+    font-size: 36px;
+    color: #f7f5f5;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 24px;
+    color: #fdf7f7;
+    margin-bottom: 20px;
+}
+
+a {
+    display: inline-block;
+    background-color: #2d00f3;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: #454ba0;
+}

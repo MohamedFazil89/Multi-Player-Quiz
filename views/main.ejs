@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
-    <link rel="stylesheet" href="styles/main3.css">
+    <link rel="stylesheet" href="styles/player.css">
 </head>
 <body>
     <form action="/submit-quiz" method="post">
         <% questions.forEach((question, index) => { %>
-            <div>
-                <p><%= question.questions %></p>
+            <div class="questions">
+                <h1><%= question.questions %></h1>
                 <input type="radio" name="answer<%= index %>" value="<%= question.option1 %>"> <%= question.option1 %><br>
                 <input type="radio" name="answer<%= index %>" value="<%= question.option2 %>"> <%= question.option2 %><br>
                 <input type="radio" name="answer<%= index %>" value="<%= question.option3 %>"> <%= question.option3 %><br>

@@ -4,12 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player</title>
-    <link rel="stylesheet" href="styles/main3.css">
+    <style>
+        /* styles/player.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    width: 200px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+    </style>
 </head>
 <body>
     <h1>Hello Player</h1>
     <form  action="/joinRoom" id="joinForm" method="GET">
-        <input type="text" name="roomids" id="room" required>
+        <input type="text" name="roomids" id="room" placeholder="Enter the Room id" required>
         <button type="submit">Join</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
