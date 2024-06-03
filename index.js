@@ -23,7 +23,6 @@ app.use(session({
 
 // -------------Database-connect---------------------- \\
 
-
 const db = new pg.Client({
     user: 'postgres',
     password: 'shin2005-89',
@@ -33,7 +32,6 @@ const db = new pg.Client({
 });
 
 db.connect();
-
 
 
 // ---------------Post-function-------------------- \\
@@ -56,7 +54,6 @@ const postfunc = (username, email, role, password, res) => {
 
 // --------------Login-check-function--------------------- \\
 
-
 let hostname;
 let playername;
 
@@ -77,7 +74,7 @@ const checkfunc = (username, password, res, role) => {
 
             } else {
                 console.log("Not a member!! Register!!");
-                res.send("Not a member!! Regester!!");
+                res.send("Not a member!! Register!!");
             }
         } else {
             console.error("Error checking user:", err);
@@ -87,8 +84,6 @@ const checkfunc = (username, password, res, role) => {
 }
 
 // ----------------Routes------------------- \\
-
-
 
 app.get("/", (req, res) => {
     db.query("select * from player", (err, result) => {
@@ -105,17 +100,12 @@ app.get("/", (req, res) => {
 
 // ---------------login-route-------------------- \\
 
-
 app.post("/login", (req, res) => {
     const { username, password, role } = req.body;
     checkfunc(username, password, res, role);
-
-
-
 })
 
 // -----------------submit-route------------------ \\
-
 
 app.post("/submit", (req, res) => {
     const { username, password, role, email } = req.body;
@@ -123,18 +113,13 @@ app.post("/submit", (req, res) => {
     setTimeout(() => {
         res.redirect("/");
     }, 3000)
-
-
 });
 
 // --------------player-route--------------------- \\
 
-
 app.get("/player", (req, res) => {
     res.render("player.ejs")
 });
-
-
 
 // ----------------list-data-in-db------------------- \\
 
@@ -147,49 +132,34 @@ app.get("/list", (req, res) => {
             console.log("done");
             val = JSON.stringify(val)
             val = val.replace(/^"(.*)"$/, '$1');
-
             res.send(val)
-            // res.render("index.ejs", {
-            //     data: val,
-            // });
         } else {
             console.log("error");
         }
-
     });
-
 })
 
 // ---------------server-port-------------------- \\
-
-
 
 const server = app.listen(port, () => {
     console.log(`Server is running on the port https://localhost:${port}`);
 });
 
-
-
 // ---------------Web-Socket-function-Init-------------------- \\
 
 let RoomIDs = [];
-
 
 db.query(`Select * from ROOMID`, (err, result) => {
     if (err) {
         console.log(err);
     } else {
         RoomIDs = result.rows;
-
     }
     console.log(RoomIDs)
-
 })
 
 // -------------PostID---------------------- \\
 
-
-// let update_arr_state = false;
 let playerstatus = false;
 
 // POST FUNC
@@ -212,7 +182,6 @@ function postid(id, host, callback) {
                     console.log('Data successfully registered into Table ROOMID');
                     poststatus = true;
                     if (callback) callback(null, 'Data successfully registered');
-
                 } else {
                     console.error(err);
                     if (callback) callback(err, null);
@@ -221,9 +190,6 @@ function postid(id, host, callback) {
         }
     });
 }
-
-
-// ------------------CheckID----------------- \\
 
 // CHECK ROOM ID FUNC
 function checkid(roomid, callback) {
@@ -243,19 +209,14 @@ function checkid(roomid, callback) {
     });
 }
 
-
-
 // ---------------Socket-Connections-Code-------------------- \\
 
 let NumofPlayer = 0;
 let connectedPlayers = [];
 let roomids;
 
-
 const io = new Server(server);
 io.on('connection', (socket) => {
-    // console.log('a user connected');
-
     socket.on('hostConnect',(value) =>{
         console.log("host connected");
         console.log(value);
@@ -263,23 +224,16 @@ io.on('connection', (socket) => {
 
     socket.on('createroom', (roomid) => {
         if (!RoomIDs.includes(roomid)) {
-            // RoomIDs.push(roomid);
             socket.join(roomid);
             console.log(hostname);
             postid(roomid, hostname);
-            // update_arr_state = true;
         } else {
             console.log("room already exists");
-            // update_arr_state = false;
-
-
         }
-       
         console.log(RoomIDs);
     })
 
     socket.on('joinRooms',  (roomid) => {
-        // console.log(roomid)
         checkid(roomid, (status) => {
             if (status) {
                 roomids = roomid
@@ -290,29 +244,19 @@ io.on('connection', (socket) => {
             } else {
                 console.log("room does not exist");
                 console.log("status:", status)
-                // console.log(RoomIDs);
-
             }
-
         });
     })
-
-
-
 
     socket.on('playerConnect', (value) =>{
         connectedPlayers.push(socket.id);
         console.log(value);
         io.emit('updatePlayerList', connectedPlayers);
-
     })
 
     socket.on('disconnect', () => {
-        // console.log('user disconnected');
         connectedPlayers = connectedPlayers.filter(playerId => playerId !== socket.id);
         io.emit('updatePlayerList', connectedPlayers);
-
-
     });
 
     // socket code end  
@@ -345,9 +289,7 @@ app.get("/enter-question", (req, res) => {
     }
 });
 
-
 // -------------Submit-Routes---------------------- \\
-
 
 app.post("/submit-question", (req, res) => {
     const { question, option1, option2, option3, option4, correctans } = req.body;
@@ -376,33 +318,30 @@ app.post("/submit-question", (req, res) => {
 
 // --------------Room-id-page-for-host--------------------- \\
 
-
 app.get("/next-task", (req, res) => {
     res.render("room.ejs");
 });
 
 // ---------------Join-Route-------------------- \\
 
-
 app.get("/join", (req, res) => {
-    if (poststatus) {
-        res.render("host.ejs", { playerlist: connectedPlayers });
-    } else {
-        res.send("Room id not avalable");
-    }
+    const roomid = req.query.roomid;
+    req.session.roomid = roomid; // Store roomid in the session
+    res.render("host.ejs", { playerlist: connectedPlayers });
 })
 
 // --------------Player-Join-Route--------------------- \\
 
+let lid;
 
-// Update the route handler for main.ejs to fetch questions
 app.get("/joinRoom", async (req, res) => {
-    console.log(roomids);
+    // const roomid = req.session.roomid; // Get roomid from the session
+    console.log("Roomidsss",roomids)
+    lid = roomids;
     if (playerstatus) {
-        // Fetch questions from the database
-        const hostq = await db.query('select host from roomid where ids = $1',[roomids])
-        console.log(hostq.rows[0].host)
-        db.query('SELECT * FROM questions where host = $1',[hostq.rows[0].host], (err, results) => {
+        const hostq = await db.query('select host from roomid where ids = $1',[roomids]);
+        const host = hostq.rows[0].host;
+        db.query('SELECT * FROM questions where host = $1',[host], (err, results) => {
             if (err) {
                 console.error("Error fetching questions:", err);
                 res.status(500).send("An error occurred while fetching questions");
@@ -411,7 +350,6 @@ app.get("/joinRoom", async (req, res) => {
             
             const questions = results.rows;
             
-            // Render main.ejs and pass the questions data
             res.render("main.ejs", { questions });
         });
     } else {
@@ -419,19 +357,16 @@ app.get("/joinRoom", async (req, res) => {
     }
 });
 
-// --------------Part-1-End-------------------- \\
-
-
-// logic for question render in main page 
-
+// ---------------Quiz-Submission-Route-------------------- \\
 
 app.post("/submit-quiz", (req, res) => {
     const submittedAnswers = req.body; // Object containing submitted answers from the form
-    console.log("Submitted Answers:", submittedAnswers); // Debugging: Log submitted answers
+    const roomid = req.session.roomid; // Get roomid from the session
     let score = 0;
+    console.log("session", lid)
 
     // Retrieve the correct answers from the database
-    db.query('SELECT * FROM questions', (err, results) => {
+    db.query('SELECT * FROM questions WHERE host = (SELECT host FROM roomid WHERE ids = $1)', [lid], (err, results) => {
         if (err) {
             console.error("Error fetching questions:", err);
             res.status(500).send("An error occurred while fetching questions");
@@ -444,19 +379,14 @@ app.post("/submit-quiz", (req, res) => {
         correctAnswers.forEach((question, index) => {
             const correctAnswer = question.correctans;
             const userAnswer = submittedAnswers[`answer${index}`];
-            console.log(`Question ${index + 1}: Correct Answer - ${correctAnswer}, User Answer - ${userAnswer}`); // Debugging: Log correct and user answers
             if (correctAnswer === userAnswer) {
                 score++;
             }
         });
 
-        // Calculate the total number of questions
         const totalQuestions = correctAnswers.length;
 
         // Render the feedback page with the user's score
         res.render("quiz-feedback.ejs", { score, totalQuestions });
     });
 });
-
-
-

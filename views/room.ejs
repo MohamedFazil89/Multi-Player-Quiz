@@ -22,6 +22,7 @@
        function JoinRoom(){
         const roomid = document.getElementById("room").value;
         socket.emit('createroom', roomid);
+        sessionStorage.setItem('roomId', roomid);
        }        
        
        document.getElementById('btn').addEventListener("click", JoinRoom);

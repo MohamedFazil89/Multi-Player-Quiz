@@ -1,49 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
     <link rel="stylesheet" href="styles/main3.css">
 </head>
-
 <body>
-    <h1>Quiz</h1>
-    <h2>Questions from <%= questions.host %></h2>
-    <form action="/submit-quiz" method="POST">
-        <% questions.forEach((question, index)=> { %>
-            <div class="question">
-                <h3>
-                    <%= index + 1 %>. <%= question.questions %>
-                </h3>
-                <ul>
-                    <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= questions.option1 %>" required>
-                        <%= question.option1 %>
-                    </li>
-                    <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= question.option2 %>" required>
-                        <%= question.option2 %>
-                    </li>
-                    <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= question.option3 %>" required>
-                        <%= question.option3 %>
-                    </li>
-                    <li>
-                        <input type="radio" name="answer<%= index %>" value="<%= question.option4 %>" required>
-                        <%= question.option4 %>
-                    </li>
-                </ul>
+    <form action="/submit-quiz" method="post">
+        <% questions.forEach((question, index) => { %>
+            <div>
+                <p><%= question.questions %></p>
+                <input type="radio" name="answer<%= index %>" value="<%= question.option1 %>"> <%= question.option1 %><br>
+                <input type="radio" name="answer<%= index %>" value="<%= question.option2 %>"> <%= question.option2 %><br>
+                <input type="radio" name="answer<%= index %>" value="<%= question.option3 %>"> <%= question.option3 %><br>
+                <input type="radio" name="answer<%= index %>" value="<%= question.option4 %>"> <%= question.option4 %><br>
             </div>
-            <% }); %>
-                <button type="submit">Submit Quiz</button>
+        <% }) %>
+        <button type="submit">Submit Quiz</button>
     </form>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        var values = document.
         socket.emit('playerConnect', "a player connected" )
     </script>
 </body>
