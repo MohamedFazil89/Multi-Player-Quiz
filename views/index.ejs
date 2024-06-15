@@ -10,13 +10,24 @@
   <title>Quiz</title>
 </head>
 
+</head>
+
 <body>
+
+  <div id="success" class="status" style="display: none;">
+    <h1 id="successs" class="text">Success</h1>
+    <p>Successfully Registered !!</p>
+  </div>
+  <div id="failed" class="status failed" style="display: none;">
+    <h1 id="fail" class="text fail">Failed</h1>
+    <p>Registration Failed !!</p>
+
+  </div>
+
+
   <div class="login-box reg">
-    <form action="/submit" method="post">
+    <form action="/submit" method="post" class="forms">
       <h1>Register</h1>
-
-
-
       <div class="role-container">
         <label style="color: white;">
           <input type="radio" name="role" value="host" required>
@@ -121,26 +132,26 @@
     var login_password = document.getElementById("passwordl");
     var toggleicon2 = document.getElementById("toggleicon2");
 
-   toggleicon1.addEventListener("click", function(){
-    const type = user_password.type === 'password'? 'text':'password';
-    user_password.setAttribute('type', type)
-    this.classList.toggle('fa-eye-slash')
+    toggleicon1.addEventListener("click", function () {
+      const type = user_password.type === 'password' ? 'text' : 'password';
+      user_password.setAttribute('type', type)
+      this.classList.toggle('fa-eye-slash')
 
 
-   })
-   toggleicon2.addEventListener("click", function(){
-    const type = login_password.type === 'password'? 'text':'password';
-    login_password.setAttribute('type', type)
-    this.classList.toggle('fa-eye-slash')
+    })
+    toggleicon2.addEventListener("click", function () {
+      const type = login_password.type === 'password' ? 'text' : 'password';
+      login_password.setAttribute('type', type)
+      this.classList.toggle('fa-eye-slash')
 
 
-   })
+    })
 
 
 
-    
-    
-        
+
+
+
 
 
     function hide(classs) {
@@ -148,6 +159,35 @@
 
     }
 
+    // -----------------------------------------------------------
+    var status = '<%= statuss %>';
+    console.log(status);
+    const success = document.getElementById("success");
+    const Failed = document.getElementById("failed");
+    const form = document.querySelector(".forms");
+
+    form.addEventListener('submit', function(){
+      if(status){
+        success.style.display = "block";
+        console.log(status);
+      }else{
+        Failed.style.display = "block";
+        console.log(status);
+      }
+    })
+
+
+
+
+
+
+
+
+    function closePopup() {
+      document.getElementById('popup-message').style.display = 'none';
+    }
+
+    // ----------------------------------------
 
 
   </script>

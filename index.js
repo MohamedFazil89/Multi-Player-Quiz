@@ -93,7 +93,8 @@ app.get("/", (req, res) => {
             return;
         }
         const rows = JSON.stringify(result.rows);
-        res.render("index.ejs", { rowss: rows });
+        res.render("index.ejs", { rowss: rows, statuss: status });
+        console.log("STATUS",status);
     });
 
 })
@@ -149,7 +150,7 @@ const server = app.listen(port, () => {
 
 let RoomIDs = [];
 
-db.query(`Select * from ROOMID`, (err, result) => {
+db.query(`Select * from host`, (err, result) => {
     if (err) {
         console.log(err);
     } else {
