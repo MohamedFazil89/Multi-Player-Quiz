@@ -4,45 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player</title>
+    <!-- <link rel="stylesheet" href="styles/player.css"> -->
     <style>
         /* styles/player.css */
 
+@font-face {
+    font-family: "Venit";
+    src: url('styles/assets/VeniteAdoremus-rgRBA.ttf');
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
     margin: 0;
     padding: 20px;
     text-align: center;
+    background-image: url('styles/assets/2151038309.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    overflow: hidden;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; */
+    
+
+
 }
 
 h1 {
     font-size: 36px;
-    color: #333;
     margin-bottom: 20px;
+    color: rgba(255, 0, 0, 0.616);
+    font-family: "Venit";
+    text-shadow: 5px 5px 10px black ;
+
 }
 
 form {
     margin-top: 20px;
+    background-color: rgba(0,0,0,0.5);
+    padding: 20px;
+    width: fit-content;
+    margin: auto;
 }
 
 input[type="text"] {
     padding: 10px;
     width: 200px;
     font-size: 16px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border: 2px solid whitesmoke;
+    transition: .5s;
+}
+
+input[type="text"]:focus{
+    background-color: black;
+    border-color: white;
+    transform: rotate(360deg);
+    color: white;
+    
 }
 
 button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: transparent;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    border: 2px solid lightblue;
+    background-color: rgb(3, 174, 231);
+
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: rgb(3, 102, 231);
+
 }
 
     </style>
