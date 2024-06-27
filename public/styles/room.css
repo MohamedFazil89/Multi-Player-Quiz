@@ -1,17 +1,30 @@
 /* styles/room-create.css */
+@font-face {
+    font-family: "Venit";
+    src: url('./assets/VeniteAdoremus-rgRBA.ttf');
+}
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
     margin: 0;
     padding: 20px;
     text-align: center;
+    background-image: url('./assets/high-tech-futuristic-urban-travel-people.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+
 }
 
 h1 {
     font-size: 36px;
-    color: #333;
+    color: #ff00009a;
     margin-bottom: 20px;
+    font-family: "Venit";
+    text-shadow: 0 0 100px black;
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    border-radius: 50%;
 }
 
 form {
@@ -22,18 +35,35 @@ input[type="number"] {
     padding: 10px;
     width: 200px;
     font-size: 16px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border: 2px solid white;
+    transition: .5s;
+    color: white;
+
+}
+
+input[type="number"]:focus{
+    background-color: black;
+    transform: scale(1.1);
 }
 
 button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #ff00009a;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s;
+    transition: .3s;
+    box-shadow: 0 0 10px black;
+
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #459da080;
+    box-shadow: 0 0 10px lightblue;
+    transform: scale(1.1);
+
 }

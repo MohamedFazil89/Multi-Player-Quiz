@@ -1,23 +1,41 @@
 /* styles/main3.css */
+/* styles/question-upload.css */
+@font-face {
+    font-family: "Venit";
+    src: url('./assets/VeniteAdoremus-rgRBA.ttf');
+}
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
     margin: 0;
     padding: 20px;
     text-align: center;
+    background-image: url('./assets/high-tech-futuristic-urban-travel-people.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+
 }
 
 h1 {
     font-size: 36px;
-    color: #333;
     margin-bottom: 20px;
+    font-family: "Venit";
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    text-align: center;
+    
+
+
 }
 
 h2 {
     font-size: 24px;
-    color: #555;
     margin-bottom: 10px;
+    font-family: "Venit";
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    text-align: center;
 }
 
 ul {
@@ -27,7 +45,10 @@ ul {
 
 li {
     font-size: 18px;
-    color: #777;
     margin-bottom: 5px;
+    font-family: "Venit";
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    text-align: center;
 }
 

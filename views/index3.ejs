@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="styles/questions.css">
 </head>
 
-<body>
-  <h1>Question Upload Page</h1>
-  <h2>current question <%= questionNumber %></h2>
+<div class="box">
+  <h1>Upload your Questions</h1>
+  <h2>current question <span><%= questionNumber %></span></h2>
   <form action="/submit-question" method="post">
     <input type="text" placeholder="Enter the question" name="question" required>
     <input type="text" placeholder="Option 1" name="option1" required>
@@ -20,6 +20,8 @@
     <input type="text" placeholder="Correct Answer" name="correctans" required>
     <button type="submit">Next</button>
   </form>
+</div>
+
 
   
 </body>
