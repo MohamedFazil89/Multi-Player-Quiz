@@ -25,7 +25,7 @@ app.use(session({
 
 const db = new pg.Client({
     user: 'postgres',
-    password: 'shin2005-89',
+    password: 'SHIN2005-89',
     database: 'quizdb',
     host: 'localhost',
     port: 5432,
@@ -258,6 +258,9 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         connectedPlayers = connectedPlayers.filter(playerId => playerId !== socket.id);
         io.emit('updatePlayerList', connectedPlayers);
+        // if(connectedPlayers === 0){
+        //     db.query()
+        // }
     });
 
     // socket code end  
